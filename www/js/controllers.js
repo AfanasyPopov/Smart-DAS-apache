@@ -55,6 +55,9 @@ angular.module('starter.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
+  $scope.$on('$ionicView.enter', function(e) {
+    $scope.login();
+  });
 })
 
 .controller('PlaylistsCtrl', function($scope) { // ----------------------------------- ----------------------------------- -----------------------------------
