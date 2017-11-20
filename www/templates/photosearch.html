@@ -1,0 +1,39 @@
+<ion-view view-title="Фото-подбор">
+<div class="wrapper">
+  <div class="contentt">
+      <ion-content class="padding">
+
+            <ion-list show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe" >
+              <ion-item ng-repeat="docList in docLists"  href="#/app/photosearchdetail/{{docList.docId}}" class=" item-thumbnail-left item-icon-right">
+              <img ng-src="{{docList.fullPathName}}" id='{{docList.title}}'  style="height:48px; width:48px">
+              <ion-icon  id='photoSearchListItem{{docList.docId}}' class="icon ion-ios-camera-outline" style="color:#3399ff" ng-click="capturePicture(docList.title)"  ></ion-icon>
+            <h3>{{docList.title}}</h3>
+            <p>{{docList.fullPathName}}</p> 
+            <ion-option-button class="button-positive" ng-click="acceptGood(item)">
+              <font >БЕЗ<br>ЗАМЕЧАНИЙ</font>
+            </ion-option-button>
+            <ion-option-button class="button-info" ng-click="acceptBad(item)" style="background-color:red">
+              <font >С<br>ЗАМЕЧАНИЯМИ</font>
+            </ion-option-button>
+            <ion-delete-button class="ion-minus-circled" ng-click="items.splice($index, 1)">
+            </ion-delete-button>
+            <ion-reorder-button class="ion-navicon" on-reorder="reorderItem(item, $fromIndex, $toIndex)">
+            </ion-reorder-button>
+              </ion-item>
+            </ion-list> 
+</ion-content>
+
+  </div>
+
+  <div class="footer padding">
+
+              <button class="button button-block button-positive icon ion-ios-camera-outline">  Авто</button>
+              
+            	
+  </div>
+
+</div>
+
+
+</ion-view>
+

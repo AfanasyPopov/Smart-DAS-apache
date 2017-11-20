@@ -1,0 +1,29 @@
+/* Empty. Add your own CSS if you like */
+* {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+}
+.wrapper {
+  position: relative;
+  min-height: 100%;
+}
+.contentt {
+  padding-bottom: 90px;
+}
+.footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+}
+.item-thumbnail-left .item-content {
+    padding-top: 8px;
+    height: 70px;
+    padding-left:65px;
+    padding-right:54px
+}
