@@ -161,8 +161,7 @@ function switchCam(){
 	.catch(function(err) {
 	  console.log(err.name + ": " + err.message);
 	});
-
-}
+};
 //additional functions fron examples
 function setSelectionRange(input, selectionStart, selectionEnd) {
   if (input.setSelectionRange) {
@@ -176,8 +175,8 @@ function setSelectionRange(input, selectionStart, selectionEnd) {
     range.moveStart('character', selectionStart);
     range.select();
   }
-
 };
+
 function setCaretToPos (input, pos) {
   setSelectionRange(input, pos, pos);
-}
+};
