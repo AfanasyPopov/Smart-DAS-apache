@@ -6,6 +6,7 @@
 html,
 body {
   height: 100%;
+
 }
 .wrapper {
   position: relative;
@@ -26,4 +27,9 @@ body {
     height: 70px;
     padding-left:65px;
     padding-right:54px
+}
+
+.connectionStatus {
+      box-shadow: 0 0 5px #999999;
+
 }

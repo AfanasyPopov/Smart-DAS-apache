@@ -1,13 +1,16 @@
+
 /**Afanfsy's part of code
  * 
  */
+
 //Put event listeners into place
 //alert("SmartDAS script is loaded.");
 var isCamInitDone = false;
 var canvas,context, video;
 var front = true;
 var mediaConfig ;
-
+var wsUri = "http://185.63.32.215:8080";
+var connectionStatus=false;
 function camInit(mediaConfig) {  // Camera initialization
     isCamInitDone = true;
 	//Grab elements, create settings, etc.
@@ -52,7 +55,7 @@ function camInit(mediaConfig) {  // Camera initialization
 			}, errBack);
 		}
 		window.myConsole.value = window.myConsole.value+"camInit: done successfull."+"\n";
-};
+}
 function makeShot(){  // Make capture from Video element
 	  canvasInit();
 	  video = document.getElementById('video');
@@ -72,7 +75,7 @@ function makeShot(){  // Make capture from Video element
 		  	  k=video.videoHeight/video.videoWidth;
 		  	  dWidth = video.videoWidth;
 		  	  dHeight = dWidth*k;
-		  };
+		  }
 	  dx = sx;
 	  dy = sy;
 	  //context.setTransform(1, 0, 0, 1, 0, 0);
@@ -88,7 +91,7 @@ function makeShot(){  // Make capture from Video element
 	  //context.fillText("CanvasWH: "+canvas.clientWidth+"x"+canvas.clientHeight+";",5,42);
 	  //context.fillText("DestWH: "+dWidth+"x"+dHeight+";",5,62);
 	  //context.drawImage(video, 0, 0, parseInt($(video).css("width").split('px')[0]),parseInt($(video).css("height").split('px')[0]) );
-}; 
+}
 function canvasInit(){  //Canvas initializine : change propertie Height, Width, etc.
 	var canvas = document.getElementById('canvas');
 	var video = document.getElementById('video');
@@ -111,7 +114,7 @@ function canvasInit(){  //Canvas initializine : change propertie Height, Width, 
 		canvas.width=video.videoWidth;
 		canvas.style.height =String(Math.round(canvas_parent.scrollHeight*height_k*video_k)-2)+'px';
 		canvas.height=video.videoHeight;
-	};
+	}
 	//window.myConsole.value=myConsole.value+"WH_k: "+width_k+";"+height_k+";"+"\n";
 	//window.myConsole.value=myConsole.value+"parentWH: "+canvas_parent.scrollWidth+"x"+canvas_parent.scrollHeight+";"+"\n";
 	window.myConsole.value=myConsole.value+"VideoWH: "+video.videoWidth+"x"+video.videoHeight+";"+"\n";
@@ -176,7 +179,24 @@ function setSelectionRange(input, selectionStart, selectionEnd) {
     range.select();
   }
 };
-
 function setCaretToPos (input, pos) {
   setSelectionRange(input, pos, pos);
 };
+
+
+
+function setBackgroundColor() {
+   // alert(connectionStatus+' webservice connected '+socket.id);
+    elements = document.getElementsByClassName('connectionStatus');
+    i = elements.length;
+
+    while(i--) {
+        if (connectionStatus) {
+            elements[i].style.backgroundColor = '#e4ffbf';//'#baffcc'; // Connection succsessfull 
+            elements[i].style.borderWidth = "3px !important";//'#baffcc'; // Connection succsessfull 
+        } else {
+            elements[i].style.backgroundColor = '#ffdeba'; // Connection lost
+            elements[i].style.borderWidth = "3px !important";//'#baffcc'; // Connection succsessfull 
+        }
+    }
+}

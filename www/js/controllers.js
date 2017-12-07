@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, toaster) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -9,9 +9,12 @@ angular.module('starter.controllers', [])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
   // Form data for the login modal
+  var socket = io('http://185.63.32.215:8080');
   var username = window.localStorage.getItem("username");
   var password = window.localStorage.getItem("password");
   var url = window.localStorage.getItem("url");
+  
+  $scope.organization="ЗАО 'РКС'";
   if (username&&password&&url) {
       $scope.loginData={'username': username, 'password': password, 'url': url};
   } else {
@@ -20,12 +23,20 @@ angular.module('starter.controllers', [])
   //Init localStorageImgArray for image-data storing (documentId:string, fullPathName:string, uploadStatus:boolean, barcodeId)
   var localStorageImgArray = window.localStorage.getItem("localStorageImgArray");
   if (localStorageImgArray) {
-      $scope.localStorageImgArray=JSON.parse(localStorage.getItem("localStorageImgArray"));;
+      $scope.localStorageImgArray=JSON.parse(localStorage.getItem("localStorageImgArray"));
   } else {
       $scope.localStorageImgArray= {};
   } 
 
-  
+      /// Create a Toaster function
+     $scope.pop = function (type, title, text){
+        toaster.pop(type, title, text);
+        //toaster.pop('error', "title", "text");
+        //toaster.pop('warning', "title", "text");
+        //toaster.pop('note', "title", "text");
+        //showAlert ('Title','Hello');
+  };
+
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
@@ -46,18 +57,69 @@ angular.module('starter.controllers', [])
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
-  window.localStorage.setItem('username', $scope.loginData["username"]);
-  window.localStorage.setItem('password', $scope.loginData["password"]);
-  window.localStorage.setItem('url', $scope.loginData["url"]);
+    window.localStorage.setItem('username', $scope.loginData["username"].toLowerCase());
+    window.localStorage.setItem('password', md5($scope.loginData["password"]));
+    
+    socket.emit('send data', $scope.loginData);
+    //alert ($scope.loginData);
+     // window.localStorage.setItem('url', $scope.loginData["url"]);
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
     $timeout(function() {
       $scope.closeLogin();
     }, 1000);
+    //location.reload(true);
   };
+    // Refresh all content (non-cash reload)
+  $scope.doReload = function() {
+    socket.emit('send data', $scope.loginData);
+    //alert ($scope.loginData);
+     // window.localStorage.setItem('url', $scope.loginData["url"]);
+    // Simulate a login delay. Remove this and replace with your login
+    // code if using a login system
+    location.reload(true);
+  };
+  
+  //Check for every routing step (check Connetion status)
   $scope.$on('$ionicView.enter', function(e) {
-    $scope.login();
+        //checkConnection ();
+        setBackgroundColor();
   });
+//-----------Socket---------------------------
+
+    //var socket = io();
+    socket.on('chat message', function(msg){
+        //alert('chat message');
+    });
+    socket.on('connected', function(msg){
+        if(!connectionStatus){
+            connectionStatus=true;
+            toaster.pop('success','Соединение','установлено');    
+            setBackgroundColor();
+            $scope.$apply(); 
+        }
+    });
+    socket.on('reconnect', function(msg){
+        connectionStatus=true;
+        toaster.pop('success','Соединение','восстановлено');    
+        setBackgroundColor();
+        $scope.$apply() ;
+    });
+    socket.on('disconnected', function(msg){
+        connectionStatus=false;
+        toaster.pop('error', 'Соединение', 'разорвано');
+        setBackgroundColor();
+        $scope.$apply() ;
+    });
+    socket.on('connect_error', function(msg){
+        if (connectionStatus){
+            connectionStatus=false;
+            toaster.pop('error', 'Соединение', 'ошибка');
+            setBackgroundColor();
+            $scope.$apply() ;
+        }
+
+    });
 })
 
 .controller('PlaylistsCtrl', function($scope) { // ----------------------------------- ----------------------------------- -----------------------------------
@@ -120,8 +182,6 @@ angular.module('starter.controllers', [])
         image.src = imageURI;
         localStorageImgArrayAddOrReplace(itemID,imageURI);
         alert(localStorageImgArray.length);
-
-
     };
     
     function onFail(message) {
@@ -137,7 +197,7 @@ angular.module('starter.controllers', [])
         navigator.vibrate([100]);  
         setTimeout (function(){navigator.vibrate(100)}, 500);
     };
-  
+
 })
 
 .controller('PhotoSearchDetailCtrl', function($scope, $http, $stateParams, $ionicPopup) { //  ----------------------------------- ----------------------------------
@@ -168,6 +228,8 @@ angular.module('starter.controllers', [])
 
 
 //glogal Function area  ----------------------------------- ----------------------------------- ----------------------------------- -----------------------------------
+
+
 
 function localStorageImgArrayAddOrReplace(itemID,imageURI){
     var flag= false;

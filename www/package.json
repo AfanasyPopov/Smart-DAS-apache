@@ -1,0 +1,16 @@
+{
+  "name": "smart-das",
+  "version": "1.0.0",
+  "description": "Smart DAS web-service",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.15.2",
+    "websocket": "^1.0.25"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Afanasy",
+  "license": "ISC"
+}

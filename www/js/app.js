@@ -4,10 +4,13 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-var itemID = "test";
+
+//var itemID = "test";
 var localStorageImgArray=[];
+var socket = io('http://185.63.32.215:8080');
+
 //var photoArray=[];
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services' ])
+angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 'starter.services','toaster'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
