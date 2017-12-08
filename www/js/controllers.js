@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, toaster) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, toastr) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -29,8 +29,12 @@ angular.module('starter.controllers', [])
   } 
 
       /// Create a Toaster function
+      $scope.openToast = function() {
+    };
+
      $scope.pop = function (type, title, text){
-        toaster.pop(type, title, text);
+        toastr.success('Hello world!', 'Toastr fun!');
+        //toastr.pop(type, title, text);
         //toaster.pop('error', "title", "text");
         //toaster.pop('warning', "title", "text");
         //toaster.pop('note', "title", "text");
@@ -94,27 +98,27 @@ angular.module('starter.controllers', [])
     socket.on('connected', function(msg){
         if(!connectionStatus){
             connectionStatus=true;
-            toaster.pop('success','Соединение','установлено');    
+            toastr.success('устоновлено', 'Соединение');
             setBackgroundColor();
             $scope.$apply(); 
         }
     });
     socket.on('reconnect', function(msg){
         connectionStatus=true;
-        toaster.pop('success','Соединение','восстановлено');    
+        toastr.success('востоновлено', 'Соединение');
         setBackgroundColor();
         $scope.$apply() ;
     });
     socket.on('disconnected', function(msg){
         connectionStatus=false;
-        toaster.pop('error', 'Соединение', 'разорвано');
+        toastr.error('завершено', 'Соединение');
         setBackgroundColor();
         $scope.$apply() ;
     });
     socket.on('connect_error', function(msg){
         if (connectionStatus){
             connectionStatus=false;
-            toaster.pop('error', 'Соединение', 'ошибка');
+            toastr.error('ошибка', 'Соединение');
             setBackgroundColor();
             $scope.$apply() ;
         }
