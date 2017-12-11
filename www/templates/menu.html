@@ -20,13 +20,13 @@
         <ion-item class="item">
           <img src="img/logo_eco.png"  alt="" height="30px" style="border-radius: 50px" /> 
             <ion-content style="position:ablosute; flor:left; left:100px; top:20px">
-              <a style="color:black">{{organization}}</a><br><a href="{{url}}" style="font-size:12px">{{url}}</a>
+              <a style="color:black">{{userData['organization']}}</a><br><a href="{{url}}" style="font-size:12px">{{url}}</a>
             </ion-content> 
         </ion-item>
         <ion-item menu-close class="item-icon-right" ng-click="login()" id="camera-list-item26">
           Авторизация <ion-icon name="ios-login" class="icon ion-ios-people-outline" style="color:#10aa10"></ion-icon>
         </ion-item>
-        <ion-item menu-close class="item-icon-right"  ng-if="true" ng-click="login()" id="camera-list-item261">
+        <ion-item menu-close class="item-icon-right"  ng-if="userData['role_name']=='root'" ng-click="login()" id="camera-list-item261">
           Администратор <ion-icon name="ios-login" class="icon ion-ios-people-outline" style="color:#3399ff"></ion-icon>
         </ion-item>
         <ion-item menu-close class="item-icon-right" href="#/app/photosearch"  id="camera-list-item27">

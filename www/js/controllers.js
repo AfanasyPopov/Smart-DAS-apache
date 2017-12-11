@@ -63,9 +63,6 @@ angular.module('starter.controllers', [])
   $scope.doLogin = function() {
     window.localStorage.setItem('username', $scope.loginData["username"].toLowerCase());
     window.localStorage.setItem('password', md5($scope.loginData["password"]));
-    $scope.data=[];
-    $scope.data["username"] = $scope.loginData["username"].toLowerCase();
-    $scope.data["password"] = md5($scope.loginData["password"]);
     socket.emit('login event',{'username': $scope.loginData["username"].toLowerCase(), 'password': md5($scope.loginData["password"])} );
     toastr.success('Запрос отправлен...', 'Авторизация:');
     //alert ($scope.loginData);
@@ -112,16 +109,17 @@ angular.module('starter.controllers', [])
     });
     
     socket.on('login event done', function(userData){
-            $scope.loginData["userkey"]= userData['key'];
+            $scope.loginData["userkey"]= userData['uuid_key'];
             window.localStorage.setItem('userkey', $scope.loginData["userkey"]);
-            toastr.success('ключ получен: '+userData['key'], 'Авторизация:');
+            toastr.success('ключ получен: '+userData['uuid_key']+"    Пользователь: "+userData['username']+" "+userData['last_name'], 'Авторизация:');
             $scope.$apply(); 
-            
+            $scope.userData=userData;
     });
     
     socket.on('login event error', function(error){
             toastr.error(error, 'Авторизация:');
             $scope.$apply(); 
+            $scope.userData=[];
     });
     socket.on('reconnect', function(msg){
         connectionStatus=true;
