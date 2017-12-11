@@ -12,11 +12,11 @@ angular.module('starter.controllers', [])
   var socket = io('http://185.63.32.215:8080');
   var username = window.localStorage.getItem("username");
   var password = window.localStorage.getItem("password");
-  var url = window.localStorage.getItem("url");
+  var userkey = window.localStorage.getItem("userkey");
   
   $scope.organization="ЗАО 'РКС'";
-  if (username&&password&&url) {
-      $scope.loginData={'username': username, 'password': password, 'url': url};
+  if (username&&password) {
+      $scope.loginData={'username': username, 'password': password, 'userkey': userkey};
   } else {
       $scope.loginData= {};
   } 
@@ -61,14 +61,21 @@ angular.module('starter.controllers', [])
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
-    toastr.success('Запрос отправлен...', 'Авторизация:');
     window.localStorage.setItem('username', $scope.loginData["username"].toLowerCase());
     window.localStorage.setItem('password', md5($scope.loginData["password"]));
-    socket.emit('login event', $scope.loginData);
+    $scope.data=[];
+    $scope.data["username"] = $scope.loginData["username"].toLowerCase();
+    $scope.data["password"] = md5($scope.loginData["password"]);
+    socket.emit('login event',{'username': $scope.loginData["username"].toLowerCase(), 'password': md5($scope.loginData["password"])} );
+    toastr.success('Запрос отправлен...', 'Авторизация:');
     //alert ($scope.loginData);
      // window.localStorage.setItem('url', $scope.loginData["url"]);
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
+    //------Clear LoginDAta & LocalStorage --- delete after dev
+    //$scope.loginData= {};
+    //window.localStorage.clear();
+
     $timeout(function() {
       $scope.closeLogin();
     }, 1000);
@@ -104,13 +111,16 @@ angular.module('starter.controllers', [])
         }
     });
     
-    socket.on('login event done', function(key){
-            toastr.success('ключ получен: '+key, 'Авторизация:');
+    socket.on('login event done', function(userData){
+            $scope.loginData["userkey"]= userData['key'];
+            window.localStorage.setItem('userkey', $scope.loginData["userkey"]);
+            toastr.success('ключ получен: '+userData['key'], 'Авторизация:');
             $scope.$apply(); 
+            
     });
     
-    socket.on('login event error', function(key){
-            toastr.error('ошибка авторизации!', 'Авторизация:');
+    socket.on('login event error', function(error){
+            toastr.error(error, 'Авторизация:');
             $scope.$apply(); 
     });
     socket.on('reconnect', function(msg){
@@ -261,7 +271,3 @@ function localStorageImgArrayAddOrReplace(itemID,imageURI){
     localStorage.setItem("localStorageImgArray", JSON.stringify(localStorageImgArray));
 }
 
-// start image capture
-function fail(msg) {
-    alert("moveTo fail");
-}
