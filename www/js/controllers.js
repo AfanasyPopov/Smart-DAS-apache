@@ -33,7 +33,7 @@ angular.module('starter.controllers', [])
     };
 
      $scope.pop = function (type, title, text){
-        toastr.success('Hello world!', 'Toastr fun!');
+        toastr.warning(text, title);
         //toastr.pop(type, title, text);
         //toaster.pop('error', "title", "text");
         //toaster.pop('warning', "title", "text");
@@ -61,10 +61,10 @@ angular.module('starter.controllers', [])
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
+    toastr.success('Запрос отправлен...', 'Авторизация:');
     window.localStorage.setItem('username', $scope.loginData["username"].toLowerCase());
     window.localStorage.setItem('password', md5($scope.loginData["password"]));
-    
-    socket.emit('send data', $scope.loginData);
+    socket.emit('login event', $scope.loginData);
     //alert ($scope.loginData);
      // window.localStorage.setItem('url', $scope.loginData["url"]);
     // Simulate a login delay. Remove this and replace with your login
@@ -102,6 +102,16 @@ angular.module('starter.controllers', [])
             setBackgroundColor();
             $scope.$apply(); 
         }
+    });
+    
+    socket.on('login event done', function(key){
+            toastr.success('ключ получен: '+key, 'Авторизация:');
+            $scope.$apply(); 
+    });
+    
+    socket.on('login event error', function(key){
+            toastr.error('ошибка авторизации!', 'Авторизация:');
+            $scope.$apply(); 
     });
     socket.on('reconnect', function(msg){
         connectionStatus=true;
