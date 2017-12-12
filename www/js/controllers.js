@@ -62,8 +62,10 @@ angular.module('starter.controllers', [])
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     window.localStorage.setItem('username', $scope.loginData["username"].toLowerCase());
-    window.localStorage.setItem('password', md5($scope.loginData["password"]));
-    socket.emit('login event',{'username': $scope.loginData["username"].toLowerCase(), 'password': md5($scope.loginData["password"])} );
+    if ($scope.loginData["password"].length!=32) {
+        window.localStorage.setItem('password', md5($scope.loginData["password"]));
+    }
+    socket.emit('login event',{'username': $scope.loginData["username"].toLowerCase(), 'password': window.localStorage.getItem('password')} );
     toastr.success('Запрос отправлен...', 'Авторизация:');
     //alert ($scope.loginData);
      // window.localStorage.setItem('url', $scope.loginData["url"]);
@@ -111,7 +113,7 @@ angular.module('starter.controllers', [])
     socket.on('login event done', function(userData){
             $scope.loginData["userkey"]= userData['uuid_key'];
             window.localStorage.setItem('userkey', $scope.loginData["userkey"]);
-            toastr.success('ключ получен: '+userData['uuid_key']+"    Пользователь: "+userData['username']+" "+userData['last_name'], 'Авторизация:');
+            toastr.success('ключ получен: '+userData['uuid_key']+" \n   Пользователь: "+userData['username']+" "+userData['last_name'], 'Авторизация:');
             $scope.$apply(); 
             $scope.userData=userData;
     });
@@ -144,7 +146,7 @@ angular.module('starter.controllers', [])
     });
 })
 
-.controller('PlaylistsCtrl', function($scope) { // ----------------------------------- ----------------------------------- -----------------------------------
+.controller('ProjectsCtrl', function($scope) { // ----------------------------------- ----------------------------------- -----------------------------------
    
   $scope.playlists = [
     { title: 'Заявки на Склад: №ФР-0001', id: 1 },

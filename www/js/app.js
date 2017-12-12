@@ -58,12 +58,12 @@ angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 
         }
       }
     })
-    .state('app.playlists', {
-      url: '/playlists',
+    .state('app.projects', {
+      url: '/projects',
       views: {
         'menuContent': {
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
+          templateUrl: 'templates/projects.html',
+          controller: 'ProjectsCtrl'
         }
       }
     })
