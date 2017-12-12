@@ -4,6 +4,8 @@
   "description": "Smart DAS web-service",
   "main": "index.js",
   "dependencies": {
+    "angular": "^1.6.7",
+    "angular-material": "^1.1.5",
     "express": "^4.15.2",
     "websocket": "^1.0.25"
   },

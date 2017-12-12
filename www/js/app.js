@@ -8,9 +8,9 @@
 //var itemID = "test";
 var localStorageImgArray=[];
 var socket = io('http://185.63.32.215:8080');
-
+var isDlgOpen;
 //var photoArray=[];
-angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 'starter.services','ngAnimate','toastr'])
+angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 'starter.services','ngAnimate','toastr','ngMaterial', 'ngMessages'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -48,8 +48,7 @@ angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 
     }
   })
   
- 
-  
+
   .state('app.browse', {
       url: '/browse',
       views: {
@@ -74,6 +73,15 @@ angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 
       'menuContent': {
         templateUrl: 'templates/playlist.html',
         controller: 'PlaylistCtrl'
+      }
+    }
+  })  
+  
+  .state('app.toast', {
+    views: {
+      'menuContent': {
+        templateUrl : 'toast-template.html',
+        controller: 'ToastCtrl'
       }
     }
   });

@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, toastr) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, toastr, $mdToast, $mdDialog) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -14,7 +14,7 @@ angular.module('starter.controllers', [])
   var password = window.localStorage.getItem("password");
   var userkey = window.localStorage.getItem("userkey");
   
-  $scope.organization="ЗАО 'РКС'";
+  $scope.organization="";
   if (username&&password) {
       $scope.loginData={'username': username, 'password': password, 'userkey': userkey};
   } else {
@@ -28,7 +28,7 @@ angular.module('starter.controllers', [])
       $scope.localStorageImgArray= {};
   } 
 
-      /// Create a Toaster function
+  /// Create a Toaster function
       $scope.openToast = function() {
     };
 
@@ -41,6 +41,16 @@ angular.module('starter.controllers', [])
         //showAlert ('Title','Hello');
   };
 
+    //--Create a Toast ngMaterial function
+    $scope.showCustomToast = function() {
+        $mdToast.show({
+          hideDelay   : 3000,
+          position    : 'top right',
+          controller  : 'ToastCtrl',
+          templateUrl : 'toast-template.html'
+        });
+      };
+      
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
@@ -67,18 +77,9 @@ angular.module('starter.controllers', [])
     }
     socket.emit('login event',{'username': $scope.loginData["username"].toLowerCase(), 'password': window.localStorage.getItem('password')} );
     toastr.success('Запрос отправлен...', 'Авторизация:');
-    //alert ($scope.loginData);
-     // window.localStorage.setItem('url', $scope.loginData["url"]);
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    //------Clear LoginDAta & LocalStorage --- delete after dev
-    //$scope.loginData= {};
-    //window.localStorage.clear();
-
     $timeout(function() {
       $scope.closeLogin();
     }, 1000);
-    //location.reload(true);
   };
     // Refresh all content (non-cash reload)
   $scope.doReload = function() {
@@ -248,9 +249,38 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) { // ----------------------------------- ----------------------------------- -----------------------------------
-});
+})
 
+.controller('ToastCtrl', function($scope, $mdToast, $mdDialog) {
 
+      $scope.closeToast = function() {
+        if (isDlgOpen) return;
+
+        $mdToast
+          .hide()
+          .then(function() {
+            isDlgOpen = false;
+          });
+      };
+
+      $scope.openMoreInfo = function(e) {
+        if ( isDlgOpen ) return;
+        isDlgOpen = true;
+
+        $mdDialog
+          .show($mdDialog
+            .alert()
+            .title('More info goes here.')
+            .textContent('Something witty.')
+            .ariaLabel('More info')
+            .ok('Got it')
+            .targetEvent(e)
+          )
+          .then(function() {
+            isDlgOpen = false;
+          });
+      };
+    });
 //glogal Function area  ----------------------------------- ----------------------------------- ----------------------------------- -----------------------------------
 
 
