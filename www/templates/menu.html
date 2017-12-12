@@ -18,21 +18,20 @@
     <ion-content>
       <ion-list>
         <ion-item class="item">
-          <img src="img/logo_eco.png"  alt="" height="30px" style="border-radius: 50px" /> 
-            <ion-content style="position:ablosute; flor:left; left:100px; top:20px">
-              <a style="color:black">{{userData['organization']}}</a><br><a href="{{url}}" style="font-size:12px">{{url}}</a>
-            </ion-content> 
+              <h2 style="color:black">{{userData.organization}}</h2>
+              <br/>
+              <h3 style="color:black">{{userData.username+' '+userData.last_name}}</h3>
         </ion-item>
-        <ion-item menu-close class="item-icon-right" ng-click="login()" id="camera-list-item26">
+        <ion-item menu-close class="item-icon-right" ng-click="login()">
           Авторизация <ion-icon name="ios-login" class="icon ion-ios-people-outline" style="color:#10aa10"></ion-icon>
         </ion-item>
-        <ion-item menu-close class="item-icon-right"  ng-if="userData['role_name']=='root'" ng-click="login()" id="camera-list-item261">
-          Администратор <ion-icon name="ios-login" class="icon ion-ios-people-outline" style="color:#3399ff"></ion-icon>
+        <ion-item menu-close class="item-icon-right"  ng-if="userData['role_name']=='root'" href="#/app/admin">
+          Администратор <ion-icon name="ios-admin" class="icon ion-ios-people-outline" style="color:#3399ff"></ion-icon>
         </ion-item>
         <ion-item menu-close  class="item-icon-right" href="#/app/projects">
           Проекты <ion-icon name="ios-documents" class="icon ion-ios-paper-outline" style="color:#3399ff"></ion-icon>
         </ion-item>
-        <ion-item menu-close class="item-icon-right" href="#/app/photosearch"  id="camera-list-item27">
+        <ion-item menu-close class="item-icon-right" href="#/app/photosearch" >
            Фото-подбор <ion-icon name="ios-camera" class="icon ion-ios-camera-outline" style="color:#3399ff"></ion-icon> 
         </ion-item>
         <ion-item menu-close class="item-icon-right" href="#/app/browse">

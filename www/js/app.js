@@ -10,7 +10,7 @@ var localStorageImgArray=[];
 var socket = io('http://185.63.32.215:8080');
 var isDlgOpen;
 //var photoArray=[];
-angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 'starter.services','ngAnimate','toastr','ngMaterial', 'ngMessages'])
+angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 'starter.services','ngAnimate','toastr','ngMaterial', 'ngMessages','material.svgAssetsCache'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -57,12 +57,23 @@ angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 
         }
       }
     })
+    
     .state('app.projects', {
       url: '/projects',
       views: {
         'menuContent': {
           templateUrl: 'templates/projects.html',
           controller: 'ProjectsCtrl'
+        }
+      }
+    })
+    
+    .state('app.admin', {
+      url: '/admin',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/admin.html',
+          controller: 'AdminCtrl'
         }
       }
     })

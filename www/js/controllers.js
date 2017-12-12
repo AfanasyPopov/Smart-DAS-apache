@@ -14,7 +14,6 @@ angular.module('starter.controllers', [])
   var password = window.localStorage.getItem("password");
   var userkey = window.localStorage.getItem("userkey");
   
-  $scope.organization="";
   if (username&&password) {
       $scope.loginData={'username': username, 'password': password, 'userkey': userkey};
   } else {
@@ -251,6 +250,16 @@ angular.module('starter.controllers', [])
 .controller('PlaylistCtrl', function($scope, $stateParams) { // ----------------------------------- ----------------------------------- -----------------------------------
 })
 
+.controller('AdminCtrl', function($scope) {
+    $scope.user = {
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+      donation: ''
+    };
+  })
+  
 .controller('ToastCtrl', function($scope, $mdToast, $mdDialog) {
 
       $scope.closeToast = function() {
