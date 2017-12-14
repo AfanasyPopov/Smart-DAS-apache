@@ -13,8 +13,8 @@ angular.module('starter.controllers', [])
   var username = window.localStorage.getItem("username");
   var password = window.localStorage.getItem("password");
   var userkey = window.localStorage.getItem("userkey");
-  
-  $scope.organization="ЗАО 'РКС'";
+  $scope.isAutoLogin=true;
+  $scope.organization="";
   if (username&&password) {
       $scope.loginData={'username': username, 'password': password, 'userkey': userkey};
   } else {
@@ -66,7 +66,7 @@ angular.module('starter.controllers', [])
         window.localStorage.setItem('password', md5($scope.loginData["password"]));
     }
     socket.emit('login event',{'username': $scope.loginData["username"].toLowerCase(), 'password': window.localStorage.getItem('password')} );
-    toastr.success('Запрос отправлен...', 'Авторизация:');
+    //toastr.success('Запрос отправлен...', 'Авторизация:');
     //alert ($scope.loginData);
      // window.localStorage.setItem('url', $scope.loginData["url"]);
     // Simulate a login delay. Remove this and replace with your login
@@ -113,7 +113,7 @@ angular.module('starter.controllers', [])
     socket.on('login event done', function(userData){
             $scope.loginData["userkey"]= userData['uuid_key'];
             window.localStorage.setItem('userkey', $scope.loginData["userkey"]);
-            toastr.success('ключ получен: '+userData['uuid_key']+" \n   Пользователь: "+userData['username']+" "+userData['last_name'], 'Авторизация:');
+            toastr.success(/*"ключ получен...": '+userData['uuid_key']+" \n  +*/"Пользователь: "+userData['username']+" "+userData['last_name'], 'Авторизация:');
             $scope.$apply(); 
             $scope.userData=userData;
     });
@@ -144,6 +144,9 @@ angular.module('starter.controllers', [])
         }
 
     });
+
+     if ($scope.isAutoLogin) {$scope.doLogin()};
+
 })
 
 .controller('ProjectsCtrl', function($scope) { // ----------------------------------- ----------------------------------- -----------------------------------
@@ -245,6 +248,10 @@ angular.module('starter.controllers', [])
 		});
 	};
 	$scope.refresh();
+})
+.controller('AdminCtrl', function($scope, $stateParams) { // ----------------------------------- ----------------------------------- -----------------------------------
+
+    
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) { // ----------------------------------- ----------------------------------- -----------------------------------

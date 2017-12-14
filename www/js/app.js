@@ -67,6 +67,15 @@ angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 
         }
       }
     })
+    .state('app.admin', {
+      url: '/admin',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/admin.html',
+          controller: 'AdminCtrl'
+        }
+      }
+    })
 
   .state('app.single', {
     url: '/playlists/:id',
