@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, toastr,$ionicHistory,$state) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, toastr, $ionicHistory, $state, $rootScope) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -93,11 +93,6 @@ angular.module('starter.controllers', [])
     location.reload(true);
   };
   
-  //Check for every routing step (check Connetion status)
-  $scope.$on('$ionicView.enter', function(e) {
-        //checkConnection ();
-        setBackgroundColor();
-  });
   
   //-----Menu subgroup ProjectsList----------------------\
   $scope.groups = [];
@@ -113,7 +108,17 @@ angular.module('starter.controllers', [])
   
 
 //-----------Socket---------------------------
-
+    $scope.getUsersList= function (){
+        //toastr.error ('Запрос отправлен',"getUsersList");
+        socket.emit('admin getUsersList',{'username': $scope.loginData["username"].toLowerCase(), 'password': window.localStorage.getItem('password')} );
+    };
+    
+    socket.on('admin getuserslist data', function(allUsersData){
+            toastr.success(allUsersData, 'allUsersData');
+            $rootScope.usersList = allUsersData;
+            $scope.usersList = allUsersData;
+            $scope.$apply(); 
+       });
     //var socket = io();
     socket.on('chat message', function(msg){
         //alert('chat message');
@@ -135,7 +140,7 @@ angular.module('starter.controllers', [])
             $scope.userData=userData;
 
     });
-    
+
     socket.on('login event error', function(error){
             toastr.error(error, 'Авторизация:');
             $scope.userData=[];
@@ -143,6 +148,8 @@ angular.module('starter.controllers', [])
             window.localStorage.setItem('userkey', $scope.loginData["userkey"]);
             $scope.$apply(); 
     });
+    
+
     socket.on('reconnect', function(msg){
         connectionStatus=true;
         toastr.success('востоновлено', 'Соединение');
@@ -251,25 +258,35 @@ angular.module('starter.controllers', [])
 
 .controller('PhotoSearchDetailCtrl', function($scope, $http, $stateParams, $ionicPopup) { //  ----------------------------------- ----------------------------------
 })
-.controller('AdminCtrl', function($scope, $stateParams, $state,$ionicHistory) { // ----------------------------------- ----------------------------------- -----------------------------------
-   //-----check for aviability for non-autorized user-----------
+.controller('AdminCtrl', function($scope, $stateParams, $state,$ionicHistory, toastr) { // ----------------------------------- ----------------------------------- -----------------------------------
+    //Check for every routing step (check Connetion status)
+ //-----check for aviability for non-autorized user-----------
     if ($scope.loginData.userkey=='') {
             $ionicHistory.nextViewOptions({disableBack: true });
             $state.go('app.browse');
-    };
+    } else {
+        $scope.$on('$ionicView.enter', function() { $scope.getUsersList() });
+        $scope.sortType     = 'name'; // set the default sort type
+        $scope.sortReverse  = false;  // set the default sort order
+        $scope.searchLine   = '';     // set the default search/filter term
 
-$scope.sortType     = 'name'; // set the default sort type
-$scope.sortReverse  = false;  // set the default sort order
-$scope.searchLine   = '';     // set the default search/filter term
-  
-  $scope.userList = [
-    { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
-    { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
-    { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
-    { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
-    { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' }
-    ];
-  
+
+       /* $scope.usersList = [
+            { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
+            { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
+            { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
+            { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
+            { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' }
+            ];*/
+        
+        
+    };
+})
+
+.controller('AdminUserCtrl', function($scope, $stateParams, $state,$ionicHistory, toastr, $rootScope) { 
+    $scope.index = $stateParams.userId;
+    $scope.user=$rootScope.usersList[parseInt($scope.index)];
+    // ----------------------------------- ----------------------------------- -----------------------------------
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) { // ----------------------------------- ----------------------------------- -----------------------------------
@@ -277,6 +294,7 @@ $scope.searchLine   = '';     // set the default search/filter term
 
 
 //glogal Function area  ----------------------------------- ----------------------------------- ----------------------------------- -----------------------------------
+
 
 
 

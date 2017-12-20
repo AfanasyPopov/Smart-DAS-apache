@@ -301,14 +301,14 @@
       closeButton: false,
       closeHtml: '<button>&times;</button>',
       containerId: 'toast-container',
-      extendedTimeOut: 1000,
+      extendedTimeOut: 2000,
       iconClasses: {
         error: 'toast-error',
         info: 'toast-info',
         success: 'toast-success',
         warning: 'toast-warning'
       },
-      maxOpened: 5,
+      maxOpened: 0,
       messageClass: 'toast-message',
       newestOnTop: true,
       onHidden: null,
@@ -324,7 +324,7 @@
         toast: 'directives/toast/toast.html',
         progressbar: 'directives/progressbar/progressbar.html'
       },
-      timeOut: 1000,
+      timeOut: 2000,
       titleClass: 'toast-title',
       toastClass: 'toast'
     });

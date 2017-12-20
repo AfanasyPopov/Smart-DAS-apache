@@ -74,9 +74,19 @@ angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 
         }
       }
     })
+    
+    .state('app.admin_user', {
+      url: '/admin_user/:userId',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/admin_user.html',
+          controller: 'AdminUserCtrl'
+        }
+      }
+    })
 
   .state('app.single', {
-    url: '/playlists/:id',
+    url: '/playlist/:id',
     views: {
       'menuContent': {
         templateUrl: 'templates/playlist.html',

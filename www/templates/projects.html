@@ -1,8 +1,8 @@
-<ion-view view-title="Документы" >
+<ion-view view-title="Проекты" >
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}">
-        {{playlist.title}} 
+      <ion-item ng-repeat="playlist in playlists" href="#/app/playlist/{{playlist.id}}">
+        Title: {{playlist.title}} , id {{playlist.id}}
       </ion-item>
     </ion-list>
   </ion-content>
