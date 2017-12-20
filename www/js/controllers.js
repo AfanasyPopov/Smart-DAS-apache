@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, toastr) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, toastr,$ionicHistory,$state) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -15,11 +15,22 @@ angular.module('starter.controllers', [])
   var userkey = window.localStorage.getItem("userkey");
   $scope.isAutoLogin=true;
   $scope.organization="";
+  $scope.menuSide="left";
+  $scope.usersCard=false;
+  $scope.dbDir=false;
   if (username&&password) {
       $scope.loginData={'username': username, 'password': password, 'userkey': userkey};
   } else {
       $scope.loginData= {};
   } 
+  //-------Set Menu side (Right for mobile / Left for browser ) version  
+        if (document.getElementsByTagName('body')[0].className.indexOf('platform-browser')!=-1) {
+            $scope.menuSide="right";
+            //alert('MenuSide:'+$scope.menuSide+';'+document.getElementsByTagName('body')[0].className.indexOf('platform-browser'));
+        } else {
+            $scope.menuSide="left";
+        }
+
   //Init localStorageImgArray for image-data storing (documentId:string, fullPathName:string, uploadStatus:boolean, barcodeId)
   var localStorageImgArray = window.localStorage.getItem("localStorageImgArray");
   if (localStorageImgArray) {
@@ -27,19 +38,6 @@ angular.module('starter.controllers', [])
   } else {
       $scope.localStorageImgArray= {};
   } 
-
-      /// Create a Toaster function
-      $scope.openToast = function() {
-    };
-
-     $scope.pop = function (type, title, text){
-        toastr.warning(text, title);
-        //toastr.pop(type, title, text);
-        //toaster.pop('error', "title", "text");
-        //toaster.pop('warning', "title", "text");
-        //toaster.pop('note', "title", "text");
-        //showAlert ('Title','Hello');
-  };
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -56,6 +54,7 @@ angular.module('starter.controllers', [])
   // Open the login modal 
   $scope.login = function() {
     $scope.modal.show();
+    setBackgroundColor();
     
   };
 
@@ -76,7 +75,11 @@ angular.module('starter.controllers', [])
     //window.localStorage.clear();
 
     $timeout(function() {
-      $scope.closeLogin();
+        if ($scope.loginData.userkey=='') {
+            $ionicHistory.nextViewOptions({disableBack: true });
+            $state.go('app.browse');
+        };
+        $scope.closeLogin();
     }, 1000);
     //location.reload(true);
   };
@@ -95,6 +98,20 @@ angular.module('starter.controllers', [])
         //checkConnection ();
         setBackgroundColor();
   });
+  
+  //-----Menu subgroup ProjectsList----------------------\
+  $scope.groups = [];
+  for (var i=0; i<3; i++) {
+    $scope.groups[i] = {
+      name: i,
+      items: []
+    };
+    for (var j=0; j<3; j++) {
+      $scope.groups[i].items.push(i + '-' + j);
+    }
+  }
+  
+
 //-----------Socket---------------------------
 
     //var socket = io();
@@ -116,12 +133,15 @@ angular.module('starter.controllers', [])
             toastr.success(/*"ключ получен...": '+userData['uuid_key']+" \n  +*/"Пользователь: "+userData['username']+" "+userData['last_name'], 'Авторизация:');
             $scope.$apply(); 
             $scope.userData=userData;
+
     });
     
     socket.on('login event error', function(error){
             toastr.error(error, 'Авторизация:');
-            $scope.$apply(); 
             $scope.userData=[];
+            $scope.loginData["userkey"]= '';
+            window.localStorage.setItem('userkey', $scope.loginData["userkey"]);
+            $scope.$apply(); 
     });
     socket.on('reconnect', function(msg){
         connectionStatus=true;
@@ -141,11 +161,13 @@ angular.module('starter.controllers', [])
             toastr.error('ошибка', 'Соединение');
             setBackgroundColor();
             $scope.$apply() ;
-        }
+        };
 
     });
 
      if ($scope.isAutoLogin) {$scope.doLogin()};
+     
+
 
 })
 
@@ -228,30 +250,26 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PhotoSearchDetailCtrl', function($scope, $http, $stateParams, $ionicPopup) { //  ----------------------------------- ----------------------------------
-    $scope.data = {};
-	$scope.id = $stateParams.id;
-	$scope.showAlert = function(title, text) {
-		$ionicPopup.alert({
-			title: title,
-			template: text
-		});
-	};
-	$scope.refresh = function() {
-		$http.get('http://api.openweathermap.org/data/2.5/forecast/daily?id='+$scope.id)
-		.success(function(data, status, headers, config){
-			$scope.data = data;
-			$scope.$broadcast('scroll.refreshComplete');
-		})
-		.error(function(data, status, headers, config){
-			$scope.showAlert(status, data);
-			$scope.$broadcast('scroll.refreshComplete');
-		});
-	};
-	$scope.refresh();
 })
-.controller('AdminCtrl', function($scope, $stateParams) { // ----------------------------------- ----------------------------------- -----------------------------------
+.controller('AdminCtrl', function($scope, $stateParams, $state,$ionicHistory) { // ----------------------------------- ----------------------------------- -----------------------------------
+   //-----check for aviability for non-autorized user-----------
+    if ($scope.loginData.userkey=='') {
+            $ionicHistory.nextViewOptions({disableBack: true });
+            $state.go('app.browse');
+    };
 
-    
+$scope.sortType     = 'name'; // set the default sort type
+$scope.sortReverse  = false;  // set the default sort order
+$scope.searchLine   = '';     // set the default search/filter term
+  
+  $scope.userList = [
+    { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
+    { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
+    { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
+    { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
+    { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' }
+    ];
+  
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) { // ----------------------------------- ----------------------------------- -----------------------------------

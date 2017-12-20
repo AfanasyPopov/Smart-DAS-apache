@@ -1,15 +1,15 @@
-<ion-modal-view>
-  <ion-header-bar class='connectionStatus'>
-        <ion-checkbox  class="checkbox-clear"  color="blue" style="border-style:none; padding-top:10px" ng-model="isAutoLogin" (ionChange)="updateAutoLogine()">Автовход</ion-checkbox>
+<ion-modal-view class="mymodal">
+      <ion-header-bar class='connectionStatus'>
+        <ion-checkbox  class="checkbox-clear"  style="border-style:none; padding-top:8px; background-color: transparent;" ng-model="isAutoLogin" (ionChange)="updateAutoLogine()">Автовход</ion-checkbox>
         <label class="button button-clear"></label>
     <h1 class="title">Smart DAS</h1>
     <div class="buttons">
       <button class="button button-clear" ng-click="closeLogin()">Закрыть</button>
     </div>
   </ion-header-bar>
-  <ion-content>
-    <form ng-submit="doLogin()">
-      <div class="list"><br><br><br><br><br>
+  <ion-content style="top:30%">
+    <form  ng-submit="doLogin()" >
+      <div class="list">
         <label class="item item-input">
           <span class="input-label" style="width:80px">Логин</span>
           <input type="text" ng-model="loginData.username">
@@ -26,9 +26,6 @@
         <label class="item"> 
           <button class="button button-block button-positive" type="submit">Вход</button>
         </label>
-         <ion-item>
-        </ion-item>
-
       </div>
     </form>
   </ion-content>

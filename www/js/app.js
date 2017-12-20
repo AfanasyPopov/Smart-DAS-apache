@@ -10,9 +10,10 @@ var localStorageImgArray=[];
 var socket = io('http://185.63.32.215:8080');
 
 //var photoArray=[];
-angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 'starter.services','ngAnimate','toastr'])
+angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 'starter.services','ngAnimate','toastr','angular-table'])
 
 .run(function($ionicPlatform) {
+    
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -47,10 +48,7 @@ angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 
       }
     }
   })
-  
- 
-  
-  .state('app.browse', {
+    .state('app.browse', {
       url: '/browse',
       views: {
         'menuContent': {
@@ -87,5 +85,5 @@ angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/photosearch');
+  $urlRouterProvider.otherwise('/app/admin');
 });

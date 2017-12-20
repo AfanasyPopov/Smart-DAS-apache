@@ -184,7 +184,7 @@ function setCaretToPos (input, pos) {
 };
 
 
-
+//-------Set color of Panels dependly Connection status.----------------------------
 function setBackgroundColor() {
    // alert(connectionStatus+' webservice connected '+socket.id);
     elements = document.getElementsByClassName('connectionStatus');
@@ -198,5 +198,6 @@ function setBackgroundColor() {
             elements[i].style.backgroundColor = '#ffdeba'; // Connection lost
             elements[i].style.borderWidth = "3px !important";//'#baffcc'; // Connection succsessfull 
         }
-    }
-}
+    };
+    
+};
