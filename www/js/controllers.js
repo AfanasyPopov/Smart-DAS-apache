@@ -13,23 +13,37 @@ angular.module('starter.controllers', [])
   var username = window.localStorage.getItem("username");
   var password = window.localStorage.getItem("password");
   var userkey = window.localStorage.getItem("userkey");
+  $scope.url="http://185.63.32.215:3000/Codiad/workspace/Smart-DAS-apache/www/";
   $scope.isAutoLogin=true;
   $scope.organization="";
-  $scope.menuSide="left";
-  $scope.usersCard=false;
-  $scope.dbDir=false;
+  $scope.usersCard=true;
+  $scope.dbDir=true;
+  $rootScope.isMobilePlatform=false;
+  $scope.items = [
+     {name: 'one', age: 30 },
+     { name: 'two', age: 27 },
+     { name: 'three', age: 50 },
+     { name: 'four', age: 15 },
+     { name: 'five', age: 27 },
+     { name: 'six', age: 30 }   
+	];
+
+  // choise mobile/desktop platform
+  $scope.$on('$ionicView.afterEnter', function() {
+   //-------Set Menu side (Right for mobile / Left for browser ) version  
+        if (document.getElementsByTagName('body')[0].className.indexOf('platform-macintel')==-1) {
+            $rootScope.isMobilePlatform=true;
+        } else {
+            $rootScope.isMobilePlatform=false;
+        }
+
+   });
+
   if (username&&password) {
       $scope.loginData={'username': username, 'password': password, 'userkey': userkey};
   } else {
       $scope.loginData= {};
   } 
-  //-------Set Menu side (Right for mobile / Left for browser ) version  
-        if (document.getElementsByTagName('body')[0].className.indexOf('platform-browser')!=-1) {
-            $scope.menuSide="right";
-            //alert('MenuSide:'+$scope.menuSide+';'+document.getElementsByTagName('body')[0].className.indexOf('platform-browser'));
-        } else {
-            $scope.menuSide="left";
-        }
 
   //Init localStorageImgArray for image-data storing (documentId:string, fullPathName:string, uploadStatus:boolean, barcodeId)
   var localStorageImgArray = window.localStorage.getItem("localStorageImgArray");
@@ -60,6 +74,8 @@ angular.module('starter.controllers', [])
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
+  	if (!$scope.loginData["username"]) {$scope.loginData["username"]=""};
+  	if (!$scope.loginData["password"]) {$scope.loginData["password"]=""};
     window.localStorage.setItem('username', $scope.loginData["username"].toLowerCase());
     if ($scope.loginData["password"].length!=32) {
         window.localStorage.setItem('password', md5($scope.loginData["password"]));
@@ -108,15 +124,16 @@ angular.module('starter.controllers', [])
   
 
 //-----------Socket---------------------------
-    $scope.getUsersList= function (){
+    $scope.getUsersList= function (){ //get user list from server by socket
         //toastr.error ('Запрос отправлен',"getUsersList");
         socket.emit('admin getUsersList',{'username': $scope.loginData["username"].toLowerCase(), 'password': window.localStorage.getItem('password')} );
     };
-    
-    socket.on('admin getuserslist data', function(allUsersData){
-            toastr.success(allUsersData, 'allUsersData');
-            $rootScope.usersList = allUsersData;
-            $scope.usersList = allUsersData;
+  
+    socket.on('admin getuserslist data', function(allUsersData){// 
+            //toastr.success(allUsersData[0], 'allUsersData[0]');
+            //toastr.success(allUsersData[1], 'allUsersData[1]');
+            $scope.usersList = allUsersData[0];
+            $scope.statusList = allUsersData[1];
             $scope.$apply(); 
        });
     //var socket = io();
@@ -269,23 +286,16 @@ angular.module('starter.controllers', [])
         $scope.sortType     = 'name'; // set the default sort type
         $scope.sortReverse  = false;  // set the default sort order
         $scope.searchLine   = '';     // set the default search/filter term
-
-
-       /* $scope.usersList = [
-            { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
-            { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
-            { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
-            { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' },
-            { name: 'Попов Афанасий', company: 'ООО РИК', active:true, role:'admin' }
-            ];*/
-        
-        
-    };
+       };
 })
 
 .controller('AdminUserCtrl', function($scope, $stateParams, $state,$ionicHistory, toastr, $rootScope) { 
     $scope.index = $stateParams.userId;
-    $scope.user=$rootScope.usersList[parseInt($scope.index)];
+    $scope.user=$scope.usersList[parseInt($scope.index)];
+    $scope.displayVal=$scope.user.role_name;
+    // Select ion-select-autocomplete.js  https://inmagik.github.io/ionic-modal-select/#/app/examples
+	toastr.success($scope.user.role_name , 'scope.user.role_name:');
+
     // ----------------------------------- ----------------------------------- -----------------------------------
 })
 
