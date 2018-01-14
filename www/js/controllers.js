@@ -289,12 +289,23 @@ angular.module('starter.controllers', [])
        };
 })
 
-.controller('AdminUserCtrl', function($scope, $stateParams, $state,$ionicHistory, toastr, $rootScope) { 
+.controller('AdminUserCtrl', function($scope, $stateParams, $state,$ionicHistory, toastr, $timeout, $rootScope, ionicMaterialInk, ionicMaterialMotion, $ionicSideMenuDelegate) { 
     $scope.index = $stateParams.userId;
     $scope.user=$scope.usersList[parseInt($scope.index)];
     $scope.displayVal=$scope.user.role_name;
     // Select ion-select-autocomplete.js  https://inmagik.github.io/ionic-modal-select/#/app/examples
-	toastr.success($scope.user.role_name , 'scope.user.role_name:');
+	//toastr.success($scope.user.role_name , 'scope.user.role_name:');
+	$scope.attendees = [
+    { firstname: 'Nicolas', lastname: 'Cage' },
+    { firstname: 'Jean-Claude', lastname: 'Van Damme' },
+    { firstname: 'Keanu', lastname: 'Reeves' },
+    { firstname: 'Steven', lastname: 'Seagal' }
+  ];
+  $timeout(function(){
+    ionicMaterialInk.displayEffect();
+      ionicMaterialMotion.ripple();
+  },0);
+
 
     // ----------------------------------- ----------------------------------- -----------------------------------
 })

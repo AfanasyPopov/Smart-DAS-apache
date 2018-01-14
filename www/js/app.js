@@ -10,7 +10,7 @@ var localStorageImgArray=[];
 var socket = io('http://185.63.32.215:8080');
 
 //var photoArray=[];
-angular.module('starter', ['ionic','angular-websocket' , 'starter.controllers', 'starter.services','ngAnimate','toastr','angular-table','ion-select-autocomplete'])
+angular.module('starter', ['ionic', 'ionic-material','angular-websocket' , 'starter.controllers', 'starter.services','ngAnimate','toastr','angular-table','ion-select-autocomplete'])
 
 .run(function($ionicPlatform) {
     

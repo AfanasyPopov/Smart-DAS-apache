@@ -1,10 +1,10 @@
 <ion-side-menus enable-menu-with-back-views="true" >
   <ion-side-menu-content >
     <ion-nav-bar   class="bar-stable connectionStatus">
-      <ion-nav-back-button>
+      <ion-nav-back-button style='color:#aaa'>
       </ion-nav-back-button>
       <ion-nav-buttons side="left">
-        <button class="button-icon button-balanced ion-ios-checkmark-outline" style="color:#3399ff" menu-toggle="left">
+        <button class="button-icon ion-ios-checkmark-outline" style="color:#3399ff" menu-toggle="left">
         </button>
       </ion-nav-buttons>
     </ion-nav-bar>
@@ -20,7 +20,7 @@
         <ion-item class="item">
           <img src="img/ionic.png"  alt="" height="30px" style="border-radius: 50px" /> 
             <ion-content style="position:ablosute; flor:left; left:100px; top:20px">
-              <a href="{{url}}" style="color:black">{{userData['organization']}}</a><br><a href="{{url}}" style="font-size:12px">{{url}}</a>
+              <a href="{{url}}" style="color:black">{{userData['organization']}}</a><br><!--<a href="{{url}}" style="font-size:12px">{{url}}</a>-->
             </ion-content> 
         </ion-item>
         <ion-item menu-close class="item-icon-right" ng-click="login()" id="authorization">
